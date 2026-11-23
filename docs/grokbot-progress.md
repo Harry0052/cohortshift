@@ -43,3 +43,33 @@ Decision recorded in `docs/overlap.md`: proceed. The acceptance case and the bas
 - **Artifact paths:** `out/proof-withheld/result.json`, `out/proof-withheld/summary.txt`, `out/proof-exact/result.json`, `out/proof-exact/summary.txt`, `inst/fixtures/oracle/proof-case.json`
 - **Open issues:** The local HTML report, the alternate target scenario, and the release workflow are not in this phase. `out/` is generated and is not committed.
 - **Next phase:** P04 — Ship the user workflow and reports.
+
+## P04 — Ship the user workflow and reports
+
+- **Phase and status:** P04 PASS
+- **Files changed:** `R/compare.R`, `R/report.R`, `R/cli.R`, `README.md`, `tests/test-all.R`, `inst/fixtures/scenarios/alternate_target.csv`, `inst/fixtures/manifest.json`, `docs/examples/proof-withheld-report.html`, `docs/examples/proof-withheld-result.json`, `docs/examples/proof-withheld-summary.txt`, `docs/examples/scenario-report.html`, `docs/examples/scenario-result.json`, `docs/examples/overlapping-age-stderr.txt`, `docs/examples/severity-refused-stderr.txt`, `docs/grokbot-progress.md`
+- **Commands and results:**
+  - `Rscript tests/test-all.R` — `Passed 86 checks`. R 4.3.3.
+  - `Rscript bin/cohortshift.R compare inst/fixtures/proof/study_marginals.csv inst/fixtures/proof/target_marginals.csv` — exit 0. Wrote `out/cohortshift/report.html`, `result.json`, and `summary.txt`. Age 65+ is 30/100 versus 50/100, difference -20 percentage points. The age-65-plus and severe row is labeled "Bounded, not observed", range -40 to 20, source `synthetic:study-margins-v1`.
+  - The same command with `--scenario inst/fixtures/scenarios/alternate_target.csv --out out/scenario` — exit 0. Study count and study source stay 30 and `synthetic:study-margins-v1`. Target source becomes `scenario:alternate-target-mix`. Age gap becomes -40. Severe gap stays -20. The intersection range becomes -40 to 10. Baseline target source `synthetic:target-margins-v1` remains in provenance.
+  - `Rscript bin/cohortshift.R compare inst/fixtures/proof/study_marginals.csv inst/fixtures/invalid/overlapping_age.csv` — exit 3. Stderr names the overlapping age bands and tells the user to use `under_65` with `age_65_plus`.
+  - The same command with `inst/fixtures/invalid/target_other_severity.csv` — exit 4. Stderr says severity definitions differ and that CohortShift does not recode strata.
+  - Headless Chrome opened `docs/examples/proof-withheld-report.html` at 1280×900 and 390×900, and opened the scenario report at 1280×900. The dumped DOM contained the skip link, the status region, the source reference, the -40 bound, and the bounded label. The narrow viewport kept the findings readable as a stacked list.
+- **Artifact paths:** `docs/examples/proof-withheld-report.html`, `docs/examples/proof-withheld-result.json`, `docs/examples/scenario-report.html`, `docs/examples/overlapping-age-stderr.txt`, `docs/examples/severity-refused-stderr.txt`
+- **Open issues:** Performance budget, dependency review, and the GitHub Actions workflow are not in this phase.
+- **Next phase:** P05 — Verify correctness, security, and performance.
+
+## P05 — Verify correctness, security, and performance
+
+- **Phase and status:** P05 PASS
+- **Files changed:** `docs/validation.md`, `tests/test-all.R`, `inst/fixtures/proof/hidden_study_marginals.csv`, `inst/fixtures/proof/hidden_target_marginals.csv`, `inst/fixtures/proof/hidden_study_joint.csv`, `inst/fixtures/proof/hidden_target_joint.csv`, `inst/fixtures/invalid/count_above_denominator.csv`, `inst/fixtures/manifest.json`, `docs/grokbot-progress.md`
+- **Commands and results:**
+  - `Rscript tests/test-all.R` — `Passed 93 checks`, exit 0. R 4.3.3 on Linux 6.12.113+ x86_64.
+  - In-process proof compare: 0.23 seconds. CLI including R startup: 0.44 seconds. Budget is 5 seconds. Fixture CSV total is 12911 bytes across 18 files.
+  - Fresh CLI run to `/tmp/fresh-proof` reproduced gap bounds -40 to 20 and coverage 0.5, and the summary says the result is not a treatment effect.
+  - Hidden-gap fixture: marginal gaps 0 and 0, intersection gap -50, study status `observed_zero`.
+  - `R CMD INSTALL --library=/tmp/cs-lib .` — `DONE (cohortshift)`.
+  - Package R sources contain no `system`, `download.file`, or HTTP client. `tests/test-all.R` is the only `system2` caller, and it runs this CLI.
+- **Artifact paths:** `docs/validation.md`, `/tmp/fresh-proof/result.json` (generated, not committed)
+- **Open issues:** GitHub Actions has not run yet. That is P07's hosted check. No third-party R packages are installed, so there is no dependency advisory list beyond the base interpreter.
+- **Next phase:** P06 — Prepare a reproducible open-source release.

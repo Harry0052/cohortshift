@@ -248,6 +248,69 @@ refuse_cli <- cli(c(
 ))
 check(refuse_cli$status == 4L && grepl("refused", refuse_cli$stderr), "CLI refuses mismatched severity definitions")
 
+base_cmp <- compare_files(fixture("proof", "study_marginals.csv"), fixture("proof", "target_marginals.csv"))
+scenario_cmp <- compare_files(
+  fixture("proof", "study_marginals.csv"),
+  fixture("proof", "target_marginals.csv"),
+  scenario_path = fixture("scenarios", "alternate_target.csv")
+)
+check(identical(scenario_cmp$scenario_id, "scenario-alternate-target"), "scenario id is recorded")
+check(identical(scenario_cmp$provenance$study_source_ref, base_cmp$provenance$study_source_ref), "scenario keeps the study source")
+check(identical(scenario_cmp$provenance$baseline_target_source_ref, "synthetic:target-margins-v1"), "scenario keeps the baseline target source")
+check(identical(scenario_cmp$provenance$target_source_ref, "scenario:alternate-target-mix"), "scenario target source is the substitute mix")
+for (stratum in c("age_65_plus", "under_65", "severe", "not_severe")) {
+  variable <- if (grepl("severe", stratum)) "severity" else "age"
+  left <- find_margin(base_cmp, variable, stratum)
+  right <- find_margin(scenario_cmp, variable, stratum)
+  check(near(left$study_count, right$study_count) && identical(left$study_source_ref, right$study_source_ref), paste("scenario preserves study", stratum))
+}
+check(near(find_margin(scenario_cmp, "age", "age_65_plus")$difference_pp, -40), "scenario changes the age gap to -40")
+check(near(find_margin(scenario_cmp, "severity", "severe")$difference_pp, -20), "scenario leaves the severe gap at -20")
+check(near(find_cell(scenario_cmp, "age_65_plus", "severe")$difference_pp_high, 10), "scenario widens only the target side of the bound")
+
+html <- render_html(base_cmp)
+check(grepl("viewport", html, fixed = TRUE) && grepl("Skip to findings", html, fixed = TRUE), "report has a viewport and a skip link")
+check(grepl("Bounded, not observed", html, fixed = TRUE) && grepl("not an observed count", html, fixed = TRUE), "unknown intersections are labeled in words")
+check(grepl("synthetic:study-margins-v1", html, fixed = TRUE) && grepl("Methodology", html, fixed = TRUE), "report shows the source and the method")
+check(grepl("30/100", html, fixed = TRUE) && grepl("50/100", html, fixed = TRUE), "report shows counts beside denominators")
+check(grepl("role=\"status\"", html, fixed = TRUE), "report announces coverage in a status region")
+
+exact_html <- render_html(exact)
+check(grepl("Observed zero", exact_html, fixed = TRUE) && grepl("-25", exact_html, fixed = TRUE), "HTML shows the observed zero and the -25 gap")
+scenario_html <- render_html(scenario_cmp)
+check(grepl("scenario-alternate-target", scenario_html, fixed = TRUE) && grepl("synthetic:study-margins-v1", scenario_html, fixed = TRUE), "scenario report names both the mix and the study source")
+
+scenario_cli <- cli(c(
+  "compare",
+  fixture("proof", "study_marginals.csv"),
+  fixture("proof", "target_marginals.csv"),
+  "--scenario", fixture("scenarios", "alternate_target.csv"),
+  "--out", tempfile("cohortshift-scenario-")
+))
+check(scenario_cli$status == 0L && grepl("report.html", scenario_cli$stdout, fixed = TRUE), "CLI scenario writes the HTML report")
+
+above <- validate_marginal_file(fixture("invalid", "count_above_denominator.csv"))
+check(!isTRUE(above$ok) && has_category(above, "bounds"), "count above the denominator is rejected")
+
+hidden <- compare_files(
+  fixture("proof", "hidden_study_marginals.csv"),
+  fixture("proof", "hidden_target_marginals.csv"),
+  fixture("proof", "hidden_study_joint.csv"),
+  fixture("proof", "hidden_target_joint.csv")
+)
+check(near(find_margin(hidden, "age", "age_65_plus")$difference_pp, 0), "matched margins can have a zero age gap")
+check(near(find_margin(hidden, "severity", "severe")$difference_pp, 0), "matched margins can have a zero severity gap")
+hidden_cell <- find_cell(hidden, "age_65_plus", "severe")
+check(identical(hidden_cell$evidence, "identified") && near(hidden_cell$difference_pp, -50), "matched margins can hide a -50 point joint gap")
+check(identical(hidden_cell$study_count_status, "observed_zero"), "the hidden-gap study cell is an observed zero")
+check(grepl("not a treatment effect", render_summary(hidden), fixed = TRUE), "the report says the gap is not a treatment effect")
+
+timing <- system.time(compare_files(
+  fixture("proof", "study_marginals.csv"),
+  fixture("proof", "target_marginals.csv")
+))
+check(timing[["elapsed"]] < 5, paste("demo compare finished in", timing[["elapsed"]], "seconds"))
+
 cat(sprintf("Passed %s checks\n", pass))
 if (length(failures)) {
   cat(paste(failures, collapse = "\n"), "\n", sep = "")

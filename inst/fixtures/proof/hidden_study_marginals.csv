@@ -1,0 +1,5 @@
+schema_version,population,variable,stratum,count,denominator,table_id,source_ref,missingness,measurement_window,definition_id
+1,study,age,under_65,50,100,hidden-study-margins,synthetic:hidden-study-margins,observed,synthetic-window-v1,age.exact.v1
+1,study,age,age_65_plus,50,100,hidden-study-margins,synthetic:hidden-study-margins,observed,synthetic-window-v1,age.exact.v1
+1,study,severity,not_severe,50,100,hidden-study-margins,synthetic:hidden-study-margins,observed,synthetic-window-v1,severity.binary.v1
+1,study,severity,severe,50,100,hidden-study-margins,synthetic:hidden-study-margins,observed,synthetic-window-v1,severity.binary.v1

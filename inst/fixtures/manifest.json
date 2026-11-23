@@ -87,6 +87,42 @@
       "bytes": 635,
       "md5": "1c572f18f0990349882a25e0956da354",
       "sha256": "22f31356ab803cf3a443fd3cd73d5b830d1c8602ffa81a6ed8821993779c37c2"
+    },
+    {
+      "path": "inst/fixtures/scenarios/alternate_target.csv",
+      "bytes": 659,
+      "md5": "f856f3b9906045fbde6a5bb8d8290ce5",
+      "sha256": "2719fd40667aa3bbcf986d47c864d87d4102e1bafcae042ae5cab84174a73e20"
+    },
+    {
+      "path": "inst/fixtures/invalid/count_above_denominator.csv",
+      "bytes": 680,
+      "md5": "b3b99aa1355674e1186038e2fbb22961",
+      "sha256": "0b810978d4110121418324c795f6107276cd3448973aab8a72db22af83ae1e0e"
+    },
+    {
+      "path": "inst/fixtures/proof/hidden_study_joint.csv",
+      "bytes": 893,
+      "md5": "c4e1767a7fb069a473326ee5aa757647",
+      "sha256": "759e12de239358e40189ef34ce98b97ddf2b5291865752435f8f92eb53124ad8"
+    },
+    {
+      "path": "inst/fixtures/proof/hidden_study_marginals.csv",
+      "bytes": 639,
+      "md5": "d8ba39591e5091f7bc8fe2cadb6f9f09",
+      "sha256": "18e2d6f6e95b38114682b5f321757c107c6452d02be9f8ce7cee1d3f7a792f9b"
+    },
+    {
+      "path": "inst/fixtures/proof/hidden_target_joint.csv",
+      "bytes": 909,
+      "md5": "f04c113862e5e54b67bb0c22daaab45e",
+      "sha256": "382482b6d497a6a82dbfec0d788638784598f86ed5958832bba4aff751e32ba9"
+    },
+    {
+      "path": "inst/fixtures/proof/hidden_target_marginals.csv",
+      "bytes": 651,
+      "md5": "42cfd8fba1a4f4feabb8f9c5210f2d5e",
+      "sha256": "4bd62df0bb544eac508a13ff92f0528f4f27be6a4ff3e2102be61348ba69e114"
     }
   ]
 }
