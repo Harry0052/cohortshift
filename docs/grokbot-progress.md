@@ -73,3 +73,17 @@ Decision recorded in `docs/overlap.md`: proceed. The acceptance case and the bas
 - **Artifact paths:** `docs/validation.md`, `/tmp/fresh-proof/result.json` (generated, not committed)
 - **Open issues:** GitHub Actions has not run yet. That is P07's hosted check. No third-party R packages are installed, so there is no dependency advisory list beyond the base interpreter.
 - **Next phase:** P06 — Prepare a reproducible open-source release.
+
+## P06 — Prepare a reproducible open-source release
+
+- **Phase and status:** P06 PASS
+- **Files changed:** `README.md`, `NEWS.md`, `CONTRIBUTING.md`, `SECURITY.md`, `.github/workflows/ci.yml`, `docs/grokbot-progress.md`
+- **Commands and results:**
+  - Copied the tree to `/tmp/cs-clean` without `.git` or `out/`. `Rscript tests/test-all.R` reported `Passed 93 checks`.
+  - The README demo, `Rscript bin/cohortshift.R compare inst/fixtures/proof/study_marginals.csv inst/fixtures/proof/target_marginals.csv`, wrote `out/cohortshift/report.html`. The JSON gap bounds were -40 and 20, and the HTML contains "Bounded, not observed".
+  - `R CMD INSTALL --library=/tmp/cs-lib-clean /tmp/cs-clean` finished `DONE (cohortshift)`. `compare_files` from that installed package returned coverage share 0.5.
+  - A text scan of the tracked tree found no private keys, cloud access-key prefixes, or password assignments. `file` reported no tracked non-text files outside `.git`.
+  - The workflow at `.github/workflows/ci.yml` uses `contents: read`, pins actions/checkout `3d3c42e5aac5ba805825da76410c181273ba90b1`, r-lib/actions/setup-r `f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05` (v2.14.0) with R 4.3.3, and actions/upload-artifact `cf430e030ddbb5b0abf93d22962f4752f3646cd9`. It runs install, `tests/test-all.R`, and the fixture demo, and uploads `out/demo`. Hosted execution is P07.
+- **Artifact paths:** `.github/workflows/ci.yml`, `NEWS.md`, `SECURITY.md`, `CONTRIBUTING.md`, `/tmp/cs-clean/out/cohortshift/report.html` (generated outside the repo)
+- **Open issues:** GitHub Actions has not run on the hosted repository yet.
+- **Next phase:** P07 — Publish and verify on GitHub.

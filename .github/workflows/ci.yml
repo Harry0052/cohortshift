@@ -1,0 +1,62 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@f9a764fea8d5c63df6ef9a5c7795bf7deb5d7e05
+        with:
+          r-version: "4.3.3"
+
+      - name: Install the package
+        run: R CMD INSTALL --no-multiarch --with-keep.source .
+
+      - name: Run tests
+        run: Rscript tests/test-all.R
+
+      - name: Run the fixture demo
+        run: >
+          Rscript bin/cohortshift.R compare
+          inst/fixtures/proof/study_marginals.csv
+          inst/fixtures/proof/target_marginals.csv
+          --out out/demo
+
+      - name: Check the demo against the oracle
+        run: |
+          python3 - << 'PY'
+          import json
+          data = json.load(open("out/demo/result.json"))
+          margins = {(row["variable"], row["stratum"]): row["difference_pp"] for row in data["marginals"]}
+          assert margins[("age", "age_65_plus")] == -20
+          assert margins[("severity", "severe")] == -20
+          cell = next(row for row in data["intersections"] if row["stratum_a"] == "age_65_plus" and row["stratum_b"] == "severe")
+          assert cell["evidence"] == "bounded"
+          assert cell["difference_pp_low"] == -40
+          assert cell["difference_pp_high"] == 20
+          assert data["coverage"]["identified"] == 4
+          assert data["coverage"]["requested"] == 8
+          text = open("out/demo/summary.txt", encoding="utf-8").read()
+          assert "not a treatment effect" in text
+          html = open("out/demo/report.html", encoding="utf-8").read()
+          assert "Bounded, not observed" in html
+          assert "synthetic:study-margins-v1" in html
+          print("demo matched the oracle")
+          PY
+
+      - name: Upload the demo report
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: demo-report
+          path: out/demo
+          if-no-files-found: error

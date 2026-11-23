@@ -1,62 +1,55 @@
 # CohortShift
 
-CohortShift compares aggregate age and severity counts for a study population and a target population. It reports marginal share differences and says whether an intersection is an exact count, a range implied by the margins, or unavailable.
+CohortShift compares aggregate age and severity counts for a study population and a target population. It reports each marginal count beside its denominator, the study share minus the target share in percentage points, and whether an intersection is an exact count, a Fréchet range, or unavailable.
 
-The tables in this repository are fictional. They are not clinical records.
+The tables shipped here are fictional aggregate counts. They are not clinical records. CohortShift does not estimate a treatment effect and does not claim that a result generalizes.
 
-## Prerequisites
+## Supported platform
 
-- R 4.3 or newer, with the base and recommended packages that ship with R.
-- No extra R packages and no network access at run time.
+Tested on Linux x86_64 with R 4.3.3 and the base and recommended packages that ship with R. No extra R packages are required, and the analysis does not use the network. GitHub Actions runs the same checks on `ubuntu-latest` with R 4.3.3.
 
-This project was developed on R 4.3.3. On Debian or Ubuntu:
+On Debian or Ubuntu:
 
 ```bash
 sudo apt-get install r-base
 ```
 
-## Check the fixture contract
+There is no separate real-data, model, or hardware demo.
 
-From the repository root:
+## Clean install and the demo
+
+From a fresh checkout:
 
 ```bash
+git clone https://github.com/Harry0052/cohortshift.git
+cd cohortshift
 Rscript tests/test-all.R
-Rscript bin/cohortshift.R validate inst/fixtures/proof/study_marginals.csv
-Rscript bin/cohortshift.R validate inst/fixtures/invalid/overlapping_age.csv
-```
-
-The valid study table exits 0 and prints a JSON object with `"ok":true`. The overlapping age table exits 3, prints `"ok":false`, and explains the overlap on standard error. A joint table is checked with the marginal file it maps:
-
-```bash
-Rscript bin/cohortshift.R validate inst/fixtures/proof/study_marginals.csv \
-  --joints inst/fixtures/proof/study_joint.csv
-Rscript bin/cohortshift.R validate inst/fixtures/proof/study_marginals.csv \
-  --joints inst/fixtures/invalid/joint_mismatch.csv
-```
-
-The first command exits 0. The second exits 3 because the joint severe cells sum to 25, not the marginal count 20.
-
-The expected numeric results for the proof tables are written out by hand in `inst/fixtures/oracle/proof-case.md`. Checksums and the synthetic-data terms are in `inst/fixtures/manifest.json`.
-
-## Walk through the sample
-
-1. Check the study table:
-
-```bash
-Rscript bin/cohortshift.R validate inst/fixtures/proof/study_marginals.csv
-```
-
-2. Compare it with the target table. The report is written to `out/cohortshift/`:
-
-```bash
 Rscript bin/cohortshift.R compare \
   inst/fixtures/proof/study_marginals.csv \
   inst/fixtures/proof/target_marginals.csv
 ```
 
-Open `out/cohortshift/report.html`. Age 65+ is 30/100 in the study and 50/100 in the target, a gap of -20 percentage points. The age-65-plus and severe intersection is labeled "Bounded, not observed" and the gap range is -40 to +20 percentage points. The study source on that row is `synthetic:study-margins-v1`, which is the `source_ref` column in `inst/fixtures/proof/study_marginals.csv`.
+The demo writes:
 
-3. Substitute the predeclared target mix and compare the age row. The severe gap stays -20. The study source stays `synthetic:study-margins-v1`.
+- `out/cohortshift/report.html` — the report to open
+- `out/cohortshift/result.json` — the machine-readable result
+- `out/cohortshift/summary.txt` — the same findings as plain text
+
+Expected result for age 65+ and severe, with no joint file: marginal gaps of -20 percentage points for age 65+ and for severe, and an intersection gap from -40 to +20 percentage points labeled "Bounded, not observed". Coverage is 4 of 8 requested subgroups. The hand arithmetic is in `inst/fixtures/oracle/proof-case.md`.
+
+`R CMD INSTALL .` installs the R package. The demo command does not need that install. `bin/cohortshift.R` loads the sources in the checkout.
+
+## Walk through the sample
+
+1. Check the study table. This exits 0:
+
+```bash
+Rscript bin/cohortshift.R validate inst/fixtures/proof/study_marginals.csv
+```
+
+2. Run the demo command above and open `out/cohortshift/report.html`. The study source on the age 65+ row is `synthetic:study-margins-v1`, the `source_ref` value in `inst/fixtures/proof/study_marginals.csv`.
+
+3. Substitute the predeclared target mix. The severe gap stays -20. The study source stays `synthetic:study-margins-v1`.
 
 ```bash
 Rscript bin/cohortshift.R compare \
@@ -66,26 +59,7 @@ Rscript bin/cohortshift.R compare \
   --out out/scenario
 ```
 
-4. An invalid table stops with an explanation and a recovery hint. This command exits 3:
-
-```bash
-Rscript bin/cohortshift.R compare \
-  inst/fixtures/proof/study_marginals.csv \
-  inst/fixtures/invalid/overlapping_age.csv
-```
-
-A target that uses a different severity definition exits 4 and does not print a gap. `result.json` is the machine-readable result. Messages that are not the result go to standard error.
-
-## Compare the proof tables with and without a joint
-
-```bash
-Rscript bin/cohortshift.R compare \
-  inst/fixtures/proof/study_marginals.csv \
-  inst/fixtures/proof/target_marginals.csv \
-  --out out/proof-withheld
-```
-
-With no joint file, age 65+ and severe is bounded: the study-minus-target gap lies from -40 to +20 percentage points, and each marginal gap is -20. Adding the joint files replaces that cell with an observed gap of -25 and marks the study count of 0 as an observed zero:
+4. Add the joint tables. Age 65+ and severe becomes an observed gap of -25 percentage points, and the study count of 0 is an observed zero:
 
 ```bash
 Rscript bin/cohortshift.R compare \
@@ -96,8 +70,20 @@ Rscript bin/cohortshift.R compare \
   --out out/proof-exact
 ```
 
-`result.json` is the machine-readable result. `summary.txt` is the description. The command exits 3 for an invalid table and 4 when the tables use different severity definitions or measurement windows.
+5. An invalid table exits 3 and explains how to fix it. A different severity definition or measurement window exits 4 and does not print a gap. Diagnostics go to standard error. JSON results go to standard output or to `result.json`.
 
-## Package layout
+```bash
+Rscript bin/cohortshift.R compare \
+  inst/fixtures/proof/study_marginals.csv \
+  inst/fixtures/invalid/overlapping_age.csv
+```
 
-`R CMD INSTALL .` installs the R package. The command above does not need that install; `bin/cohortshift.R` loads the package sources from the checkout.
+`Rscript bin/cohortshift.R help` lists the commands and exit codes.
+
+## Fixture terms
+
+Counts are hand-specified integers created for this repository. They are not sampled, so there is no generator seed. Checksums, the synthetic-data statement, and the source label are in `inst/fixtures/manifest.json`. No external table is copied. Age buckets and severity definitions are the ones named in `inst/schema/marginal-v1.json`.
+
+## License and changes
+
+This project is released under the MIT license. See `LICENSE`. Version 0.1.0 notes are in `NEWS.md`. Contribution steps are in `CONTRIBUTING.md`. Vulnerability reports are described in `SECURITY.md`.
