@@ -1,0 +1,5 @@
+cohortshift: the aggregate table was rejected.
+[partition] (variable age) Age strata age_50_plus [50, Inf) and age_65_plus [65, Inf) overlap. CohortShift does not interpolate or merge overlapping age bands.
+Hint: Choose one exact partition, such as under_65 with age_65_plus.
+[partition] (variable age) Observed age strata sum to 90, which does not equal denominator 100.
+Hint: Include every mutually exclusive stratum, or mark a missing stratum as suppressed or absent instead of dropping it.

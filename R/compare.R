@@ -330,7 +330,7 @@ compare_populations <- function(study, target, study_joint = NULL, target_joint 
   )
 }
 
-compare_files <- function(study_path, target_path, study_joint_path = NULL, target_joint_path = NULL) {
+compare_files <- function(study_path, target_path, study_joint_path = NULL, target_joint_path = NULL, scenario_path = NULL) {
   study <- validate_marginal_file(study_path)
   if (!isTRUE(study$ok)) {
     return(study)
@@ -338,6 +338,23 @@ compare_files <- function(study_path, target_path, study_joint_path = NULL, targ
   target <- validate_marginal_file(target_path)
   if (!isTRUE(target$ok)) {
     return(target)
+  }
+  baseline <- target
+  scenario_id <- NULL
+  if (!is.null(scenario_path)) {
+    scenario <- validate_marginal_file(scenario_path)
+    if (!isTRUE(scenario$ok)) {
+      return(scenario)
+    }
+    if (scenario$data$population[[1L]] != "target") {
+      return(.refuse(
+        "schema",
+        "A target scenario must use population target.",
+        "Put the substitute mix in a marginal CSV whose population column is target."
+      ))
+    }
+    scenario_id <- scenario$data$table_id[[1L]]
+    target <- scenario
   }
   study_joint <- NULL
   if (!is.null(study_joint_path)) {
@@ -348,10 +365,27 @@ compare_files <- function(study_path, target_path, study_joint_path = NULL, targ
   }
   target_joint <- NULL
   if (!is.null(target_joint_path)) {
+    if (!is.null(scenario_path)) {
+      return(.refuse(
+        "schema",
+        "A target scenario replaces the target marginal table, so a target joint from the baseline table is not used.",
+        "Omit --joints-target, or add a joint whose margin_table_id is the scenario table."
+      ))
+    }
     target_joint <- validate_joint_file(target_joint_path, target)
     if (!isTRUE(target_joint$ok)) {
       return(target_joint)
     }
   }
-  compare_populations(study, target, study_joint, target_joint)
+  result <- compare_populations(study, target, study_joint, target_joint)
+  if (!isTRUE(result$ok)) {
+    return(result)
+  }
+  result$scenario_id <- scenario_id
+  result$provenance$baseline_target_source_ref <- baseline$data$source_ref[[1L]]
+  result$provenance$baseline_target_table_id <- baseline$data$table_id[[1L]]
+  if (!is.null(scenario_id)) {
+    result$provenance$scenario_note <- "Target counts come from the scenario file. Study counts and study source references are unchanged."
+  }
+  result
 }

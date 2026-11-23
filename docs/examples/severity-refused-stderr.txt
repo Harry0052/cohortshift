@@ -1,0 +1,2 @@
+cohortshift: comparison refused [definition]. severity definitions differ (severity.binary.v1 versus severity.binary.v2). Joint analysis is refused.
+Hint: Use the same definition_id in the study and the target. CohortShift does not recode or interpolate strata.

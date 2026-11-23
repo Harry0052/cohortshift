@@ -5,7 +5,7 @@
     "Usage:",
     "  Rscript bin/cohortshift.R help",
     "  Rscript bin/cohortshift.R validate <marginals.csv> [--joints <joints.csv>]",
-    "  Rscript bin/cohortshift.R compare <study.csv> <target.csv> [--joints-study <joints.csv>] [--joints-target <joints.csv>] [--out <directory>]",
+    "  Rscript bin/cohortshift.R compare <study.csv> <target.csv> [--joints-study <joints.csv>] [--joints-target <joints.csv>] [--scenario <target.csv>] [--out <directory>]",
     "",
     "validate checks schema version 1, nonnegative counts, explicit missingness,",
     "mutually exclusive age and severity strata, and, when a joint file is given,",
@@ -104,7 +104,7 @@
     message(.cli_help())
     return(2L)
   }
-  unknown <- setdiff(names(parsed$flags), c("joints-study", "joints-target", "out"))
+  unknown <- setdiff(names(parsed$flags), c("joints-study", "joints-target", "scenario", "out"))
   if (length(unknown)) {
     message(sprintf("cohortshift: unknown option --%s.", unknown[[1L]]))
     return(2L)
@@ -113,7 +113,8 @@
     parsed$positionals[[1L]],
     parsed$positionals[[2L]],
     study_joint_path = parsed$flags[["joints-study"]],
-    target_joint_path = parsed$flags[["joints-target"]]
+    target_joint_path = parsed$flags[["joints-target"]],
+    scenario_path = parsed$flags[["scenario"]]
   )
   if (!isTRUE(result$ok)) {
     if (!is.null(result$errors)) {
@@ -134,7 +135,10 @@
     cat(to_json(written), "\n")
     return(3L)
   }
-  cat(to_json(list(ok = TRUE, output = written$directory, json = written$json, summary = written$summary)), "\n")
+  cat(to_json(list(
+    ok = TRUE, output = written$directory, json = written$json,
+    summary = written$summary, html = written$html
+  )), "\n")
   0L
 }
 
