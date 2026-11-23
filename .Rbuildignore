@@ -1,0 +1,11 @@
+^docs$
+^bin$
+^out$
+^\.github$
+^\.git$
+^\.gitignore$
+^README\.md$
+^SECURITY\.md$
+^CONTRIBUTING\.md$
+^NEWS\.md$
+^scripts$

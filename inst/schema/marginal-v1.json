@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "kind": "marginal",
+  "units": {
+    "count": "people in the stratum",
+    "denominator": "people in the population table"
+  },
+  "columns": [
+    "schema_version",
+    "population",
+    "variable",
+    "stratum",
+    "count",
+    "denominator",
+    "table_id",
+    "source_ref",
+    "missingness",
+    "measurement_window",
+    "definition_id"
+  ],
+  "variables": ["age", "severity"],
+  "missingness": ["observed", "suppressed", "absent"],
+  "age_definition": "age.exact.v1",
+  "age_buckets": {
+    "under_65": "[0, 65)",
+    "age_65_plus": "[65, Inf)",
+    "age_50_plus": "[50, Inf)"
+  },
+  "severity_definitions": {
+    "severity.binary.v1": ["severe", "not_severe"],
+    "severity.binary.v2": ["severe", "not_severe"]
+  },
+  "limits": {
+    "max_bytes": 5242880,
+    "max_rows": 10000,
+    "max_denominator": 1000000000
+  },
+  "error_categories": [
+    "schema",
+    "bounds",
+    "partition",
+    "definition",
+    "missingness",
+    "joint",
+    "row_level",
+    "resource"
+  ]
+}
