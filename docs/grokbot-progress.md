@@ -87,3 +87,16 @@ Decision recorded in `docs/overlap.md`: proceed. The acceptance case and the bas
 - **Artifact paths:** `.github/workflows/ci.yml`, `NEWS.md`, `SECURITY.md`, `CONTRIBUTING.md`, `/tmp/cs-clean/out/cohortshift/report.html` (generated outside the repo)
 - **Open issues:** GitHub Actions has not run on the hosted repository yet.
 - **Next phase:** P07 — Publish and verify on GitHub.
+
+## P07 — Publish and verify on GitHub
+
+- **Phase and status:** P07 PASS
+- **Files changed:** `docs/grokbot-progress.md`
+- **Commands and results:**
+  - Remote is `https://github.com/Harry0052/cohortshift`. `gh api repos/Harry0052/cohortshift` reported `visibility: public`, `private: false`, and license `MIT`. `gh api user` returned HTTP 403, so the token's user profile was not readable. Push to the authorized repository succeeded.
+  - Pushed `cursor/cohortshift-mvp-bc70` and opened https://github.com/Harry0052/cohortshift/pull/1. The pull request was not merged.
+  - GitHub Actions on head `cf2d69317f30502f9b86d1b166cb49870304ae24` completed with conclusion `success` for both the push run https://github.com/Harry0052/cohortshift/actions/runs/45120294591 and the pull-request run https://github.com/Harry0052/cohortshift/actions/runs/45120310900.
+  - Annotated tag `v0.1.0` points at that commit. `git clone --branch v0.1.0` checked out `cf2d69317f30502f9b86d1b166cb49870304ae24`. In that checkout, `Rscript tests/test-all.R` reported `Passed 93 checks`, and the README demo wrote a report whose age-65-plus and severe gap was -40 to 20 percentage points, with coverage share 0.5 and the label "Bounded, not observed".
+- **Artifact paths:** https://github.com/Harry0052/cohortshift/pull/1, tag `v0.1.0`, `/tmp/cs-tag-out/report.html` from the tagged checkout
+- **Open issues:** None that block the release. The authenticated user profile endpoint was not available to this token. The tag stays on `cf2d69317f30502f9b86d1b166cb49870304ae24`; this progress note is the following commit.
+- **Next phase:** None. The owner merges the pull request.
