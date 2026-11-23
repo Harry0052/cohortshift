@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "kind": "joint",
+  "columns": [
+    "schema_version",
+    "population",
+    "variable_a",
+    "stratum_a",
+    "variable_b",
+    "stratum_b",
+    "count",
+    "denominator",
+    "table_id",
+    "source_ref",
+    "missingness",
+    "measurement_window",
+    "definition_id_a",
+    "definition_id_b",
+    "margin_table_id"
+  ],
+  "mapping": "variable_a is age and variable_b is severity. One joint table maps one marginal table_id.",
+  "complete": "Every age stratum in the marginal table is crossed with every severity stratum. A cell may be observed, suppressed, or absent. Observed cells must reproduce each observed marginal count."
+}

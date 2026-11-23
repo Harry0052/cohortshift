@@ -1,0 +1,11 @@
+Package: cohortshift
+Version: 0.1.0
+Title: Aggregate Study-versus-Target Subgroup Evidence
+Description: Compare fictional aggregate age and severity counts for a study
+    and a target population. Report marginal gaps and label each intersection
+    as an exact count, a Fréchet bound, or unavailable.
+License: MIT + file LICENSE
+Depends: R (>= 4.3)
+Encoding: UTF-8
+Author: CohortShift contributors
+Maintainer: CohortShift contributors <cohortshift@users.noreply.github.com>

@@ -1,0 +1,24 @@
+CohortShift comparison
+
+Methodology: Shares are the stratum count divided by that population's denominator. The marginal gap is the study share minus the target share, in percentage points. For an intersection, the feasible count is at least max(0, count A + count B - N) and at most min(count A, count B). The gap bounds subtract opposite endpoints. An exact joint count replaces those bounds only when every joint cell is observed and the cells sum to both declared margins. These figures describe cohort composition. They are not a treatment effect, not an imputed outcome, and not evidence that a result generalizes.
+
+Limitations:
+- Aggregate counts only. Individual records are rejected.
+- An observed zero is a source count of zero. Suppressed, absent, and unevaluable cells are not zeros.
+- A bounded intersection is the set of counts consistent with the margins. It is not an observed gap.
+- Equal marginal shares do not imply an equal intersection.
+- No clinical recommendation and no claim of treatment generalizability is made.
+
+Marginal gaps (study share minus target share):
+- age / age_65_plus: study 30/100, target 50/100, difference -20 percentage points. Evidence: identified. Count status: observed_positive. Sources: synthetic:study-margins-v1 | synthetic:target-margins-v1.
+- age / under_65: study 70/100, target 50/100, difference 20 percentage points. Evidence: identified. Count status: observed_positive. Sources: synthetic:study-margins-v1 | synthetic:target-margins-v1.
+- severity / not_severe: study 80/100, target 60/100, difference 20 percentage points. Evidence: identified. Count status: observed_positive. Sources: synthetic:study-margins-v1 | synthetic:target-margins-v1.
+- severity / severe: study 20/100, target 40/100, difference -20 percentage points. Evidence: identified. Count status: observed_positive. Sources: synthetic:study-margins-v1 | synthetic:target-margins-v1.
+
+Intersections:
+- age_65_plus x not_severe: not an observed gap. The study-minus-target gap can lie from -40 to 20 percentage points (study count 10 to 30, target count 10 to 50). Evidence: bounded. Count status: unevaluable (study unevaluable, target unevaluable). Sources: synthetic:study-margins-v1 | synthetic:target-margins-v1.
+- age_65_plus x severe: not an observed gap. The study-minus-target gap can lie from -40 to 20 percentage points (study count 0 to 20, target count 0 to 40). Evidence: bounded. Count status: unevaluable (study unevaluable, target unevaluable). Sources: synthetic:study-margins-v1 | synthetic:target-margins-v1.
+- under_65 x not_severe: not an observed gap. The study-minus-target gap can lie from 0 to 60 percentage points (study count 50 to 70, target count 10 to 50). Evidence: bounded. Count status: unevaluable (study unevaluable, target unevaluable). Sources: synthetic:study-margins-v1 | synthetic:target-margins-v1.
+- under_65 x severe: not an observed gap. The study-minus-target gap can lie from -40 to 20 percentage points (study count 0 to 20, target count 0 to 40). Evidence: bounded. Count status: unevaluable (study unevaluable, target unevaluable). Sources: synthetic:study-margins-v1 | synthetic:target-margins-v1.
+
+Coverage: 4 of 8 requested subgroups have identified counts (share 0.5).

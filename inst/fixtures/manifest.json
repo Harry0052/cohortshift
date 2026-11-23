@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "generated": "hand-specified integers; no generator seed",
+  "terms": "Fictional aggregate counts created for this repository. Not clinical records. No external table is copied. Redistribution follows the repository MIT license.",
+  "source_ref_prefix": "synthetic",
+  "files": [
+    {
+      "path": "inst/fixtures/proof/study_marginals.csv",
+      "bytes": 607,
+      "md5": "df75a9df47c54b7a4773c0eed00935ff",
+      "sha256": "ca73e04123a6a9d61f537c4073f6029e50e5548c66db36728c0985419140e1e3"
+    },
+    {
+      "path": "inst/fixtures/proof/target_marginals.csv",
+      "bytes": 619,
+      "md5": "1f3b559ac5081b6562b36965ed27d2de",
+      "sha256": "44df341d33cacf80ad444554715602daec0449f68b8da7e1d77f976684f919c9"
+    },
+    {
+      "path": "inst/fixtures/proof/study_joint.csv",
+      "bytes": 846,
+      "md5": "fdca1a70d1c1bac4eb98fdc6266cdbbf",
+      "sha256": "2df8980f8d844f2f17c8805576da06c3e4a1a85519cd84a8ce015f0b9337852a"
+    },
+    {
+      "path": "inst/fixtures/proof/target_joint.csv",
+      "bytes": 863,
+      "md5": "e35dd0ed46ccdcd515eabdf6e13ff969",
+      "sha256": "824d1d3f45834544a4eccb645aa0f391ff2727e9cd701e80d5e989a550927549"
+    },
+    {
+      "path": "inst/fixtures/invalid/overlapping_age.csv",
+      "bytes": 602,
+      "md5": "d37af3045a5d0961bd812f6a5d3198ac",
+      "sha256": "9e0d89a42a5f29981f909ae1fbfe48a42ce7035a4583fab34830d1a97a81edad"
+    },
+    {
+      "path": "inst/fixtures/invalid/unsupported_age.csv",
+      "bytes": 661,
+      "md5": "f710a292f53e12455f3a1dbcfb028ee0",
+      "sha256": "386c605c14038593998f41df3b1c1c380f299228318b0b716cd61fc1e7d06a7e"
+    },
+    {
+      "path": "inst/fixtures/invalid/negative_count.csv",
+      "bytes": 607,
+      "md5": "c04def9d0893bacbd1a29c33ff3b9966",
+      "sha256": "089e2e306f4b2fa395de1f26bae3216f364aaaf8ef837213628158b24b1dabb4"
+    },
+    {
+      "path": "inst/fixtures/invalid/row_level.csv",
+      "bytes": 641,
+      "md5": "ac05a30c4685105cf111bc7e81f4e383",
+      "sha256": "9c24240a016249c78849f603dd3df34b45cadeaa9affda409ae8e2b16e61d05f"
+    },
+    {
+      "path": "inst/fixtures/invalid/joint_mismatch.csv",
+      "bytes": 837,
+      "md5": "4606503387038140a717b45a27815990",
+      "sha256": "e220c874d352c3c28d36884550993a207792632a8d1606ce26161cbc6e0fe07e"
+    },
+    {
+      "path": "inst/fixtures/status/suppressed_joint.csv",
+      "bytes": 911,
+      "md5": "792cf04da4a2ea2cbee62c7e76d2445b",
+      "sha256": "a467d3ed829c4a8f0aa59521468530c31612db1b188455f88dcbd3f99d6d8f1b"
+    },
+    {
+      "path": "inst/fixtures/oracle/proof-case.json",
+      "bytes": 1017,
+      "md5": "a5c08d9dc7957fe9f233ee3b13a41763",
+      "sha256": "80ae4e5cea5fb6db99e76d6792034ec8e29cf498ec59a0881234f7eb1af03883"
+    },
+    {
+      "path": "inst/fixtures/oracle/proof-case.md",
+      "bytes": 2432,
+      "md5": "973470d6f9b016cd8c681495a1a64c20",
+      "sha256": "75278ece42440f509655b5a2872f2390c1c031f36691aaf2a69698932ad1cef6"
+    },
+    {
+      "path": "inst/fixtures/invalid/target_other_severity.csv",
+      "bytes": 651,
+      "md5": "79737228a8a65573c51a17a7711e9d73",
+      "sha256": "4fe664d5b3503458f1260ad35c735bb1cc7c56aee9a376e37977be523b3cd2a6"
+    },
+    {
+      "path": "inst/fixtures/invalid/target_other_window.csv",
+      "bytes": 635,
+      "md5": "1c572f18f0990349882a25e0956da354",
+      "sha256": "22f31356ab803cf3a443fd3cd73d5b830d1c8602ffa81a6ed8821993779c37c2"
+    },
+    {
+      "path": "inst/fixtures/scenarios/alternate_target.csv",
+      "bytes": 659,
+      "md5": "f856f3b9906045fbde6a5bb8d8290ce5",
+      "sha256": "2719fd40667aa3bbcf986d47c864d87d4102e1bafcae042ae5cab84174a73e20"
+    },
+    {
+      "path": "inst/fixtures/invalid/count_above_denominator.csv",
+      "bytes": 680,
+      "md5": "b3b99aa1355674e1186038e2fbb22961",
+      "sha256": "0b810978d4110121418324c795f6107276cd3448973aab8a72db22af83ae1e0e"
+    },
+    {
+      "path": "inst/fixtures/proof/hidden_study_joint.csv",
+      "bytes": 893,
+      "md5": "c4e1767a7fb069a473326ee5aa757647",
+      "sha256": "759e12de239358e40189ef34ce98b97ddf2b5291865752435f8f92eb53124ad8"
+    },
+    {
+      "path": "inst/fixtures/proof/hidden_study_marginals.csv",
+      "bytes": 639,
+      "md5": "d8ba39591e5091f7bc8fe2cadb6f9f09",
+      "sha256": "18e2d6f6e95b38114682b5f321757c107c6452d02be9f8ce7cee1d3f7a792f9b"
+    },
+    {
+      "path": "inst/fixtures/proof/hidden_target_joint.csv",
+      "bytes": 909,
+      "md5": "f04c113862e5e54b67bb0c22daaab45e",
+      "sha256": "382482b6d497a6a82dbfec0d788638784598f86ed5958832bba4aff751e32ba9"
+    },
+    {
+      "path": "inst/fixtures/proof/hidden_target_marginals.csv",
+      "bytes": 651,
+      "md5": "42cfd8fba1a4f4feabb8f9c5210f2d5e",
+      "sha256": "4bd62df0bb544eac508a13ff92f0528f4f27be6a4ff3e2102be61348ba69e114"
+    }
+  ]
+}

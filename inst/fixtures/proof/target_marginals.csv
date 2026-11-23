@@ -1,0 +1,5 @@
+schema_version,population,variable,stratum,count,denominator,table_id,source_ref,missingness,measurement_window,definition_id
+1,target,age,under_65,50,100,target-margins-v1,synthetic:target-margins-v1,observed,synthetic-window-v1,age.exact.v1
+1,target,age,age_65_plus,50,100,target-margins-v1,synthetic:target-margins-v1,observed,synthetic-window-v1,age.exact.v1
+1,target,severity,not_severe,60,100,target-margins-v1,synthetic:target-margins-v1,observed,synthetic-window-v1,severity.binary.v1
+1,target,severity,severe,40,100,target-margins-v1,synthetic:target-margins-v1,observed,synthetic-window-v1,severity.binary.v1

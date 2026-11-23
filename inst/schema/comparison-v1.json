@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "kind": "comparison",
+  "units": {
+    "difference_pp": "percentage points, study share minus target share",
+    "share": "count divided by the population denominator"
+  },
+  "evidence": ["identified", "bounded", "unavailable"],
+  "count_status": [
+    "observed_zero",
+    "observed_positive",
+    "suppressed",
+    "absent",
+    "unevaluable"
+  ],
+  "coverage": "requested subgroups with identified counts, divided by requested subgroups. Requested subgroups are the marginal strata plus every age-by-severity cell."
+}

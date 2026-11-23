@@ -1,0 +1,5 @@
+schema_version,population,variable_a,stratum_a,variable_b,stratum_b,count,denominator,table_id,source_ref,missingness,measurement_window,definition_id_a,definition_id_b,margin_table_id
+1,study,age,age_65_plus,severity,severe,0,100,study-joint-v1,synthetic:study-joint-v1,observed,synthetic-window-v1,age.exact.v1,severity.binary.v1,study-margins-v1
+1,study,age,age_65_plus,severity,not_severe,30,100,study-joint-v1,synthetic:study-joint-v1,observed,synthetic-window-v1,age.exact.v1,severity.binary.v1,study-margins-v1
+1,study,age,under_65,severity,severe,20,100,study-joint-v1,synthetic:study-joint-v1,observed,synthetic-window-v1,age.exact.v1,severity.binary.v1,study-margins-v1
+1,study,age,under_65,severity,not_severe,50,100,study-joint-v1,synthetic:study-joint-v1,observed,synthetic-window-v1,age.exact.v1,severity.binary.v1,study-margins-v1

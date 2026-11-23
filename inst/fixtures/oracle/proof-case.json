@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "marginals": [
+    {"variable": "age", "stratum": "under_65", "difference_pp": 20},
+    {"variable": "age", "stratum": "age_65_plus", "difference_pp": -20},
+    {"variable": "severity", "stratum": "not_severe", "difference_pp": 20},
+    {"variable": "severity", "stratum": "severe", "difference_pp": -20}
+  ],
+  "withheld_joint": {
+    "stratum_a": "age_65_plus",
+    "stratum_b": "severe",
+    "evidence": "bounded",
+    "study_count_low": 0,
+    "study_count_high": 20,
+    "target_count_low": 0,
+    "target_count_high": 40,
+    "difference_pp_low": -40,
+    "difference_pp_high": 20,
+    "coverage_requested": 8,
+    "coverage_identified": 4,
+    "coverage_share": 0.5
+  },
+  "exact_joint": {
+    "stratum_a": "age_65_plus",
+    "stratum_b": "severe",
+    "study_count": 0,
+    "target_count": 25,
+    "difference_pp": -25,
+    "study_count_status": "observed_zero",
+    "evidence": "identified",
+    "coverage_requested": 8,
+    "coverage_identified": 8,
+    "coverage_share": 1
+  }
+}
